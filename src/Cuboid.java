@@ -48,7 +48,7 @@ public class Cuboid {
             swap(4, 5);
         } else if (face == Cube.Face.TOP) {
             swap(0, 1);
-            swap(0, 3);
+            swap(1, 3);
             swap(1, 5);
         } else if (face == Cube.Face.BOTTOM) {
             swap(0, 1);

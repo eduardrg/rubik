@@ -1,6 +1,6 @@
 public class CubeManager {
     public static void main(String[] args) {
-        Cube cube = new Cube();
+        Cube cube = new Cube(true);
 
         cube.printFace(Cube.Face.FRONT);
         cube.printFace(Cube.Face.BACK);
@@ -10,10 +10,19 @@ public class CubeManager {
         cube.printFace(Cube.Face.BOTTOM);
 
         System.out.println(cube.isSolved());
-        cube.rotateLeft(Cube.Face.LEFT);
+        cube.reset();
         System.out.println(cube.isSolved());
-        cube.rotateRight(Cube.Face.LEFT);
+        cube.scramble();
         System.out.println(cube.isSolved());
+        cube.reset();
+        System.out.println(cube.isSolved());
+        /*
+        cube.printFace(Cube.Face.FRONT);
+        cube.printFace(Cube.Face.BACK);
+        cube.printFace(Cube.Face.LEFT);
+        cube.printFace(Cube.Face.RIGHT);
+        cube.printFace(Cube.Face.TOP);
+        cube.printFace(Cube.Face.BOTTOM);
         /*
         cube.printFace(Cube.Face.FRONT);
         cube.printFace(Cube.Face.BACK);

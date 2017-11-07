@@ -1,19 +1,24 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.Stack;
 
 public class Cube {
     private Cuboid[][][] cuboids;
     private static final int SIZE = 3;
-
+    private Random r;
+    private Stack<Move> moveHistory;
     public enum Face {
         LEFT, RIGHT, BOTTOM, TOP, FRONT, BACK
     }
 
     private Map<Face, FaceParams> faces;
 
-    Cube() {
+    Cube(boolean solved) {
+        this.r = new Random();
         this.cuboids = new Cuboid[SIZE][SIZE][SIZE];
         this.faces = new HashMap<>();
+        this.moveHistory = new Stack<Move>();
         this.faces.put(Face.LEFT, new FaceParams(2, -1, 3));
         this.faces.put(Face.RIGHT, new FaceParams(18, 1, 3));
         this.faces.put(Face.TOP, new FaceParams(2, 9, -1));
@@ -27,6 +32,17 @@ public class Cube {
                     this.cuboids[x][y][z] = new Cuboid(new int[]{0, 1, 2, 3, 4, 5});
                 }
             }
+        }
+        if (!solved) {
+            this.scramble();
+        }
+    }
+
+    void scramble() {
+        Face[] faces = Face.values();
+        for (int i = 1; i <= 10; i++) {
+            Move move = new Move(faces[r.nextInt(faces.length)], Move.Direction.LEFT, r.nextInt(4) + 1);
+            this.doMove(move, true);
         }
     }
 
@@ -45,19 +61,36 @@ public class Cube {
         return this.cuboids[x][y][z];
     }
 
-    public void rotateLeft(Face face) {
-        this.rotateLeft(face, 1);
+    public void undo() {
+        if (!this.moveHistory.isEmpty()) {
+            Move move = this.moveHistory.pop().reverse();
+            doMove(move, false);
+        }
     }
 
-    public void rotateRight(Face face) {
-        this.rotateRight(face, 1);
+    public void reset() {
+        while (!this.moveHistory.isEmpty()) {
+            Move move = this.moveHistory.pop().reverse();
+            doMove(move, false);
+        }
     }
 
-    public void rotateRight(Face face, int times) {
+    public void doMove(Move move, boolean save) {
+        if (move.direction == Move.Direction.LEFT) {
+            rotateLeft(move.face, move.times);
+        } else {
+            rotateRight(move.face, move.times);
+        }
+        if (save) {
+            this.moveHistory.push(move);
+        }
+    }
+
+    private void rotateRight(Face face, int times) {
         times = times % 4;
         rotateLeft(face, 4 - times);
     }
-    public void rotateLeft(Face face, int times) {
+    private void rotateLeft(Face face, int times) {
         times = times % 4;
         for (int i = 1; i <= times; i++) {
             if (!this.faces.containsKey(face)) throw new IllegalArgumentException();
@@ -65,7 +98,7 @@ public class Cube {
         }
     }
 
-    void rotateLeft(FaceParams faceParams, Face face) {
+    private void rotateLeft(FaceParams faceParams, Face face) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 getCuboid(faceParams.getStart() + (j * faceParams.getColInc()) + (i * faceParams.getRowInc())).rotateLeft(face);
