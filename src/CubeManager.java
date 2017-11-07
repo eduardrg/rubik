@@ -1,11 +1,27 @@
 public class CubeManager {
     public static void main(String[] args) {
         Cube cube = new Cube();
+
         cube.printFace(Cube.Face.FRONT);
+        cube.printFace(Cube.Face.BACK);
         cube.printFace(Cube.Face.LEFT);
+        cube.printFace(Cube.Face.RIGHT);
+        cube.printFace(Cube.Face.TOP);
+        cube.printFace(Cube.Face.BOTTOM);
+
+        System.out.println(cube.isSolved());
         cube.rotateLeft(Cube.Face.LEFT);
+        System.out.println(cube.isSolved());
+        cube.rotateRight(Cube.Face.LEFT);
+        System.out.println(cube.isSolved());
+        /*
         cube.printFace(Cube.Face.FRONT);
+        cube.printFace(Cube.Face.BACK);
         cube.printFace(Cube.Face.LEFT);
+        cube.printFace(Cube.Face.RIGHT);
+        cube.printFace(Cube.Face.TOP);
+        cube.printFace(Cube.Face.BOTTOM);*/
+
 
         /*
         System.out.println(cube.getCuboid(0).getColor(Cube.Face.LEFT));

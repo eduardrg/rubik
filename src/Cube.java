@@ -61,11 +61,17 @@ public class Cube {
         times = times % 4;
         for (int i = 1; i <= times; i++) {
             if (!this.faces.containsKey(face)) throw new IllegalArgumentException();
-            rotateLeft(this.faces.get(face));
+            rotateLeft(this.faces.get(face), face);
         }
     }
 
-    void rotateLeft(FaceParams faceParams) {
+    void rotateLeft(FaceParams faceParams, Face face) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                getCuboid(faceParams.getStart() + (j * faceParams.getColInc()) + (i * faceParams.getRowInc())).rotateLeft(face);
+            }
+        }
+
         int topMid = faceParams.getStart() + faceParams.getColInc();
         int topRight = faceParams.getStart() + 2 * faceParams.getColInc();
         int leftMid = faceParams.getStart() + faceParams.getRowInc();
@@ -81,11 +87,6 @@ public class Cube {
         swap(topMid, rightMid);
         swap(rightMid, bottomMid);
 
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                getCuboid(faceParams.getStart() + (i * faceParams.getColInc()) + (j * faceParams.getRowInc())).rotateLeft();
-            }
-        }
     }
 
     Cuboid getCuboid(int[] a) {
@@ -108,13 +109,29 @@ public class Cube {
 
     public void printFace(Face face) {
         FaceParams faceParams = this.faces.get(face);
+        System.out.println(String.valueOf(face));
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                Cuboid cuboid = getCuboid(faceParams.getStart() + (i * faceParams.getColInc()) + (j * faceParams.getRowInc()));
+                Cuboid cuboid = getCuboid(faceParams.getStart() + (j * faceParams.getColInc()) + (i * faceParams.getRowInc()));
                 System.out.print(cuboid.getColor(face) + " ");
             }
             System.out.println();
         }
+    }
+
+    public boolean isSolved() {
+        for (Face f : Face.values()) {
+            FaceParams fp = this.faces.get(f);
+            Cuboid cuboid = this.getCuboid(fp.getStart());
+            int color = cuboid.getColor(f);
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    Cuboid c = getCuboid(fp.getStart() + (j * fp.getColInc()) + (i * fp.getRowInc()));
+                    if (c.getColor(f) != color) return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
