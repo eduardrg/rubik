@@ -6,9 +6,12 @@ import static org.junit.Assert.*;
 public class CubeTest {
     Cube cube;
     @Before
-    public void makeNewCube() {
+    public void makeNewSolvedCube() {
         this.cube = new Cube(true);
     }
+
+    @Test
+    public void makeNewScrambledCube() { this.cube = new Cube(true); }
 
     @Test
     public void newCubeShouldBeSolved() {
@@ -25,7 +28,7 @@ public class CubeTest {
     public void allMovesShouldBeReversible() {
         for (int i = 0; i < Cube.Face.values().length; i++) {
             for (int j = 0; j < Move.Direction.values().length; j++) {
-                makeNewCube();
+                makeNewSolvedCube();
                 moveShouldBeReversible(new Move(Cube.Face.values()[i], Move.Direction.values()[j], 1));
             }
         }

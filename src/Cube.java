@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -29,7 +30,7 @@ public class Cube {
         for (int x = 0; x < SIZE; x++) {
             for (int y = 0; y < SIZE; y++) {
                 for (int z = 0; z < SIZE; z++) {
-                    this.cuboids[x][y][z] = new Cuboid(new int[]{0, 1, 2, 3, 4, 5});
+                    this.cuboids[x][y][z] = new Cuboid();
                 }
             }
         }
@@ -156,7 +157,7 @@ public class Cube {
         for (Face f : Face.values()) {
             FaceParams fp = this.faces.get(f);
             Cuboid cuboid = this.getCuboid(fp.getStart());
-            int color = cuboid.getColor(f);
+            Color color = cuboid.getColor(f);
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     Cuboid c = getCuboid(fp.getStart() + (j * fp.getColInc()) + (i * fp.getRowInc()));
